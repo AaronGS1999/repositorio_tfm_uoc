@@ -1,0 +1,62 @@
+.title, .author, .date {
+    text-align: center;
+}
+
+p {
+    text-align: justify;
+}
+
+h2 {
+    margin-left: 1em; 
+}
+
+h3 {
+    margin-left: 2em; 
+}
+
+#TOCTitle {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 0.5em;
+    margin: 0;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+#TOC ul {
+  
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#TOC ul ul {
+    margin-left: 1em;
+}
+
+#TOC a {
+    text-decoration: none;
+}
+
+#TOC a:hover {
+    text-decoration: underline;
+}
+#TOC:before {
+  content: "Tabla de contenidos";
+  font-size: 2em;
+  text-align: justify;
+  /* font-weight: bold;*/
+}
+
+pre {
+  font-size: 12px; /* Ajusta el tamaño de la fuente según lo desees */
+}
+
+code.r{
+  font-size: 12px;
+}
+
+#refs {
+    margin-left: 1em;
+    text-indent: -1em;
+  }

@@ -1,0 +1,30 @@
+---
+title: "Repositorio TFM UOC"
+author: "Aaron Gálvez Salido"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+    toc: true
+    number_sections: true
+    toc_depth: '3'
+    css: styles.css
+  pdf_document:
+    toc: true
+    toc_depth: '3'
+  word_document:
+    toc: true
+    toc_depth: '3'
+  html_document:
+    toc: true
+    toc_depth: '3'
+    number_sections: true
+subtitle: Certificación de variedades comerciales de pistacho (Pistacia vera) mediante marcadores moleculares.
+editor_options:
+  markdown:
+    wrap: 72
+link-citations: true
+always_allow_html: true
+---
+
