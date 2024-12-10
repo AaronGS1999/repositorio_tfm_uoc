@@ -97,7 +97,8 @@ qc_report(qc.dir, result.file = "multi-qc-report-all.html")
 
 ```
 
-El resultado se puede ver aquí
+El resultado se puede ver
+[aquí](https://aarongs1999.github.io/repositorio_tfm_uoc/reports/multi-qc-report-all.html.html).
 
 # Alineamiento y llamada de variantes
 
