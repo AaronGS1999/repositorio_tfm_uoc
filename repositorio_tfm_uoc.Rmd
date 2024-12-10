@@ -89,7 +89,7 @@ Las para ver si había problemas de secuenciación, se utilizó FastQC
 reportes:
 
 ```{r eval=FALSE}
-qc.dir <- #Ruta a los reportes de FastQC en html
+qc.dir <-  #Ruta a los reportes de FastQC .zip
 qc <- qc_aggregate(qc.dir)
 qc_fails(qc, "module")
 qc_fails(qc, "sample")
