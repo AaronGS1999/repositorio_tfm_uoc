@@ -383,6 +383,8 @@ un número de SNPs suficientes.
 Para esto se utilizó la librería de R [@karyoploteR] y los archivos .bed
 de posiciones validadas que se generan en el apartado anterior:
 
+\# SNPs -\> GRanges
+
 ```{r eval=FALSE}
 library(karyoploteR)
 library(GenomicRanges)
@@ -413,16 +415,14 @@ cromosomas_karyoploteR <- data.frame(
   start = 1,
   end = cromosomas$length.pb)
 
-# Cargar los datos de SNPs
-snps1 <- read.table("HDP1002.bed", header = FALSE, col.names = c("chr", "start", "end"))
-snps2 <- read.table("MDP1002.bed", header = FALSE, col.names = c("chr", "start", "end"))
-#snps3 <- read.table("TDP100.bed", header = FALSE, col.names = c("chr", "start", "end"))
+# Cargar los datos
+snps1 <- read.table("HDP100.bed", header = FALSE, col.names = c("chr", "start", "end"))
+snps2 <- read.table("MDP100.bed", header = FALSE, col.names = c("chr", "start", "end"))
+snps3 <- read.table("TDP100.bed", header = FALSE, col.names = c("chr", "start", "end"))
 
-# Función para procesar SNPs
+# Procesar SNPs
 procesar_snps <- function(snps) {
-  # Remplazar id por cromosoma
   snps$chr <- cromosomas$chromosome[match(snps$chr, cromosomas$id)]
-  # SNPs -> GRanges
   makeGRangesFromDataFrame(snps, keep.extra.columns = TRUE)
 }
 
