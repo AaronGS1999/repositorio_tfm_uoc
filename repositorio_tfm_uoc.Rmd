@@ -429,7 +429,7 @@ procesar_snps <- function(snps) {
 # Procesar cada conjunto de SNPs
 snps_granges1 <- procesar_snps(snps1)
 snps_granges2 <- procesar_snps(snps2)
-#snps_granges3 <- procesar_snps(snps3)
+snps_granges3 <- procesar_snps(snps3)
 
 
 kp <- plotKaryotype(genome = cromosomas_karyoploteR, cytobands = NULL)
@@ -439,12 +439,8 @@ kpPlotDensity(kp, data = snps_granges1, r0=0, r1=0.33,  border = "grey", col = "
 
 kpPlotDensity(kp, data = snps_granges2, r0=0.33, r1=0.66, border = "grey", col = "lightblue") 
 
-#kpPlotDensity(kp, data = snps_granges3, r0=0.66, r1=1, border = "grey", col = "orange") 
+kpPlotDensity(kp, data = snps_granges3, r0=0.66, r1=1, border = "grey", col = "orange") 
 
-# Añadir una leyenda
-legend("topright", legend = c("SNPs H", "SNPs M", "SNPs T"), 
-       col = c("lightgreen", "lightblue", "orange"), 
-       border = c("grey", "grey", "grey"), bty = "n", cex = 0.8)colums = TRUE
 
 ```
 
