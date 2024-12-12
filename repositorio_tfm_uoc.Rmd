@@ -468,6 +468,89 @@ de referencia en formato fasta se puede generaar un base de datos para
 usar SnpEff [@cingolani2012] para realizar la anotación funcional de los
 SNPs.
 
+# Análisis de cantidad de SNPs por cromosoma
+
+Para ver si se acumulan significativamente SNPs en algún cromosoma se
+realizan test estadísticos y se realiza un gráfico donde las barras de
+error representa la desviación estándar.
+
+```{r eval=FALSE}
+# Librerías
+library(car)
+library(FSA)
+library(knitr) 
+
+# Datos.
+datos_cromosomas <- data.frame(
+  Cromosoma = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"),
+  Tamaño = c(41445905, 35111735, 55874636, 37637094, 37450664, 39830480, 39797145, 32774349, 32571006, 37402841, 50110595, 38139874, 45017634, 62820281, 37340759),
+  SNPs = c(128, 63, 62, 133, 27, 51, 57, 39, 28, 47, 70, 43, 51, 123, 104),
+  tasa_de_SNPs = c(323796, 557329, 901203, 282985, 1387061, 780989, 698195, 840367, 1163250, 795805, 715865, 886973, 882698, 510733, 359045)
+)
+
+# Densidad de SNPs x Mb
+datos_cromosomas$densidad_SNPs_ajustada <- (datos_cromosomas$SNPs / datos_cromosomas$Tamaño) * 1e6
+
+
+resultados <- list()
+
+# Comparación de cada cromosoma
+for (cromosoma in datos_cromosomas$Cromosoma) {
+  datos_temporales <- datos_cromosomas
+  datos_temporales$Grupo <- ifelse(datos_temporales$Cromosoma == cromosoma, cromosoma, "Otros")
+  
+  # test Asunción de normalidad
+  shapiro_test <- shapiro.test(datos_temporales$densidad_SNPs_ajustada)
+  # Test de levene variabilidad
+  levene_test <- leveneTest(densidad_SNPs_ajustada ~ Grupo, data = datos_temporales)
+  
+  # Si se cumplen las asunciones, test paramétrico
+  if (shapiro_test$p.value > 0.05 && levene_test[[3]][1] > 0.05) {
+    t_test <- t.test(densidad_SNPs_ajustada ~ Grupo, data = datos_temporales, alternative = "greater")
+    # Guardo los resultados del t-test en mi lista.
+    resultados[[cromosoma]] <- data.frame(
+      Cromosoma = cromosoma,
+      Test = "t-test",
+      Estadístico = t_test$statistic,
+      Valor_p = t_test$p.value
+    )
+    print(t_test) 
+  } else {
+    # Si no se cumplen las asunciones, test no paramétrico
+    wilcox_test <- wilcox.test(densidad_SNPs_ajustada ~ Grupo, data = datos_temporales, alternative = "greater")
+    resultados[[cromosoma]] <- data.frame(
+      Cromosoma = cromosoma,
+      Test = "Wilcoxon",
+      Estadístico = wilcox_test$statistic,
+      Valor_p = wilcox_test$p.value
+    )
+    print(wilcox_test)
+  }
+}
+
+# Tabla resumen
+tabla_resumen <- do.call(rbind, resultados)
+kable(tabla_resumen, caption = "Resumen de pruebas de hipótesis") 
+
+# Desviación estándar
+desviacion_estandar <- sd(datos_cromosomas$densidad_SNPs_ajustada)
+
+# Ordenar cromosomas eje x
+datos_cromosomas$Cromosoma <- factor(datos_cromosomas$Cromosoma, levels = as.character(1:15))
+
+# Genero el gráfico de barras
+ggplot(datos_cromosomas, aes(x = Cromosoma, y = densidad_SNPs_ajustada)) +
+  geom_col(fill = "steelblue") +  
+  geom_errorbar(aes(ymin = densidad_SNPs_ajustada - desviacion_estandar, 
+                    ymax = densidad_SNPs_ajustada + desviacion_estandar), width = 0.2) + 
+  labs(title = "Comparación Densidad de SNPs por Mb", 
+       x = "Cromosoma", 
+       y = "Densidad de SNPs por Mb") + 
+  theme_minimal() 
+```
+
+![](images/dens_snps_crom.png)
+
 # Referencias
 
 ::: {#refs}
