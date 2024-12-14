@@ -551,6 +551,84 @@ ggplot(datos_cromosomas, aes(x = Cromosoma, y = densidad_SNPs_ajustada)) +
 
 ![](images/dens_snps_crom.png)
 
+# Diseño de cebadores para el panel de SNPs propuesto
+
+Para ello se procesará un archivo .csv que contiene información de las
+variantes tales como variedad a la que pertenece, cromosoma, posición el
+nucleótido en el genoma de referencia, la variante y la región funcional
+en la que se encuentra. Se usará el genoma de referencia para crear
+secuencias de 201 nucleótidos formadas por 100 nucleótidos aguas arriba
+y abajo de la variante que serán almacenadas en un archivo multifasta.
+Esto se hizo con el siguiente script en bash.
+
+```{bash eval=FALSE}
+#!/bin/bash
+
+declare -A cromosomas
+cromosomas[1]='CM048778.1'
+cromosomas[2]='CM048779.1'
+cromosomas[3]='CM048780.1'
+cromosomas[4]='CM048781.1'
+cromosomas[5]='CM048782.1'
+cromosomas[6]='CM048783.1'
+cromosomas[7]='CM048784.1'
+cromosomas[8]='CM048785.1'
+cromosomas[9]='CM048786.1'
+cromosomas[10]='CM048787.1'
+cromosomas[11]='CM048788.1'
+cromosomas[12]='CM048789.1'
+cromosomas[13]='CM048790.1'
+cromosomas[14]='CM048791.1'
+cromosomas[15]='CM048792.1'
+
+# Archivo de entrada
+input_file="panel_snps.csv"
+
+# Archivos de salida
+output_file_variant="secuencias_con_variante.fasta"
+output_file_original="secuencias_sin_variante.fasta"
+
+# borra el contenido de los archivos de salida
+> "$output_file_variant"
+> "$output_file_original"
+
+# Procesado del archivo de entrada
+while IFS=, read -r id variedad sexo cromosoma posicion referencia variante region efecto; do
+  # Ignorar la primera línea (encabezados)
+  if [[ "$id" == "ID" ]]; then
+    continue
+  fi
+
+  # Construir el encabezado del fasta
+  header_variant=">${id}_${variedad}_${region}_Ref:${referencia}_Var:${variante}"
+  header_original=">${id}_${variedad}_${region}_sin_variante"
+
+  # Obtener el ID del cromosoma
+  cromosoma_id="${cromosomas[$cromosoma]}"
+
+  # Calcular las coordenadas para las secuencias
+  start_left=$((posicion - 100))
+  end_right=$((posicion + 100))
+
+  # Extraer las secuencias original completa
+  secuencia_original=$(samtools faidx GCA_026535395.1_Bagyolu_genome_genomic.fna "${cromosoma_id}:${start_left}-${end_right}" | tail -n +2 | tr -d '\n' | tr 'a-z' 'A-Z')
+
+  # Extraer las secuencias con la variante
+  end_left=$((posicion - 1))
+  start_right=$((posicion + 1))
+  secuencia_izquierda=$(samtools faidx GCA_026535395.1_Bagyolu_genome_genomic.fna "${cromosoma_id}:${start_left}-${end_left}" | tail -n +2 | tr -d '\n' | tr 'a-z' 'A-Z')
+  secuencia_derecha=$(samtools faidx GCA_026535395.1_Bagyolu_genome_genomic.fna "${cromosoma_id}:${start_right}-${end_right}" | tail -n +2 | tr -d '\n' | tr 'a-z' 'A-Z')
+
+  # Construir la secuencia con variante
+  secuencia_con_variante="${secuencia_izquierda}${variante}${secuencia_derecha}"
+
+  # Escribir las secuencias en los archivos multifasta
+  echo -e "${header_variant}\n${secuencia_con_variante}" >> "$output_file_variant"
+  echo -e "${header_original}\n${secuencia_original}" >> "$output_file_original"
+done < "$input_file"
+
+```
+
 # Referencias
 
 ::: {#refs}
