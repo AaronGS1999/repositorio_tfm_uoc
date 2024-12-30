@@ -12,7 +12,7 @@
 
 <meta name="author" content="Aaron Gálvez Salido" />
 
-<meta name="date" content="2024-12-14" />
+<meta name="date" content="2024-12-30" />
 
 <title>Repositorio TFM UOC</title>
 
@@ -153,7 +153,7 @@ code span.ot { color: #007020; }
 comerciales de pistacho (Pistacia vera) mediante marcadores
 moleculares.</h3>
 <h4 class="author project-author">Aaron Gálvez Salido</h4>
-<h4 class="date project-date">2024-12-14</h4>
+<h4 class="date project-date">2024-12-30</h4>
 </section>
 
 
@@ -745,6 +745,30 @@ un archivo multifasta. Esto se hizo con el siguiente script en bash.</p>
 <span id="cb10-62"><a href="#cb10-62" tabindex="-1"></a>  <span class="bu">echo</span> <span class="at">-e</span> <span class="st">&quot;</span><span class="va">${header_variant}</span><span class="st">\n</span><span class="va">${secuencia_con_variante}</span><span class="st">&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">$output_file_variant</span><span class="st">&quot;</span></span>
 <span id="cb10-63"><a href="#cb10-63" tabindex="-1"></a>  <span class="bu">echo</span> <span class="at">-e</span> <span class="st">&quot;</span><span class="va">${header_original}</span><span class="st">\n</span><span class="va">${secuencia_original}</span><span class="st">&quot;</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">$output_file_original</span><span class="st">&quot;</span></span>
 <span id="cb10-64"><a href="#cb10-64" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> <span class="st">&quot;</span><span class="va">$input_file</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Tras esto, se aplicará el programas Primer3 versión 4.1.0 <span class="citation">(<a href="#ref-untergasser2012">Untergasser et al.
+2012</a>)</span> a cada secuencia, para diseñar cebadores flanqueantes y
+un oligo interno justo delante de la variante en 5’. El archivo de
+configuración utilizado es el siguiente:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="va">SEQUENCE_ID</span><span class="op">=</span>secuencias_con_variante</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="va">SEQUENCE_TEMPLATE</span><span class="op">=</span>/home/aaron/secuencias_con_variante.fasta</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="va">PRIMER_PRODUCT_SIZE_RANGE</span><span class="op">=</span>150-200</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="va">PRIMER_OPT_SIZE</span><span class="op">=</span>20</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="va">PRIMER_MIN_SIZE</span><span class="op">=</span>18</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="va">PRIMER_MAX_SIZE</span><span class="op">=</span>25</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="va">PRIMER_OPT_TM</span><span class="op">=</span>60.0</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="va">PRIMER_MIN_TM</span><span class="op">=</span>55.0</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="va">PRIMER_MAX_TM</span><span class="op">=</span>65.0</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="va">PRIMER_MIN_GC</span><span class="op">=</span>40.0</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="va">PRIMER_MAX_GC</span><span class="op">=</span>60.0</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="va">PRIMER_NUM_RETURN</span><span class="op">=</span>5</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="va">PRIMER_PICK_LEFT_PRIMER</span><span class="op">=</span>1</span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="va">PRIMER_PICK_INTERNAL_OLIGO</span><span class="op">=</span>1</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="va">PRIMER_PICK_RIGHT_PRIMER</span><span class="op">=</span>1</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="va">PRIMER_EXPLAIN_FLAG</span><span class="op">=</span>1</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="va">PRIMER_TASK</span><span class="op">=</span>pick_primer_list</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="va">PRIMER_TARGET</span><span class="op">=</span>50,70 <span class="ex">130,150</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="va">PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION</span><span class="op">=</span>0,90 <span class="ex">100,201</span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="ex">=</span></span></code></pre></div>
 </div>
 <div id="referencias" class="section level1" number="13">
 <h1><span class="header-section-number">13</span> Referencias</h1>
@@ -806,6 +830,12 @@ information.”</span> <em>Nucleic Acids Research</em> 50 (D1): D20–26. <a hre
 Shumate, Alaina, and Steven L Salzberg. 2021. <span>“Liftoff: Accurate
 Mapping of Gene Annotations.”</span> <em>Bioinformatics</em> 37 (12):
 1639–43. <a href="https://doi.org/10.1093/bioinformatics/btaa1016">https://doi.org/10.1093/bioinformatics/btaa1016</a>.
+</div>
+<div id="ref-untergasser2012" class="csl-entry">
+Untergasser, Andreas, Ioana Cutcutache, Toomas Koressaar, Jian Ye, Brant
+C Faircloth, Maido Remm, and Steve G Rozen. 2012.
+<span>“Primer3<span></span>new Capabilities and Interfaces.”</span>
+<em>Nucleic Acids Research</em> 40 (15): e115e115.
 </div>
 </div>
 </div>
