@@ -629,7 +629,7 @@ done < "$input_file"
 
 ```
 
-Tras esto, se aplicará el programas Primer3 versión 4.1.0
+Tras esto, se aplicará el programa Primer3 versión 4.1.0
 [@untergasser2012] a cada secuencia, para diseñar cebadores flanqueantes
 y un oligo interno justo delante de la variante en 5'. El archivo de
 configuración utilizado es el siguiente:
